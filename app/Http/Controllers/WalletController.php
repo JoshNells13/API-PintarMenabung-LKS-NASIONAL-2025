@@ -43,7 +43,7 @@ class WalletController extends Controller
                 'id' => $Wallets->id,
                 'currency_code' => $Wallets->Currency->name
             ]
-        ],200);
+        ], 200);
     }
 
     public function UpdateWalet(Request $request, $id)
@@ -144,39 +144,32 @@ class WalletController extends Controller
 
     public function GetDetailWallets(Request $request, $id)
     {
-        $Wallets = Wallet::where('id', $id)->first();
+        // Ambil wallet milik user + eager load currency
+        $wallet = Wallet::with('Currency')
+            ->where('id', $id)
+            ->where('user_id', $request->user()->id)
+            ->first();
 
-        $Wallets->with('Currency');
 
-        $Checkuser = Wallet::where('user_id', $request->user()->id)->first();
-
-        if (!$Wallets) {
+        if (!$wallet) {
             return response([
                 'status' => 'error',
-                'message' => 'Not found'
+                'message' => 'Not found or forbidden access'
             ], 404);
         }
 
-        if (!$Checkuser) {
-            return response([
-                'status' => 'error',
-                'message' => 'Forbiden Access'
-            ], 403);
-        }
-
-
         return response([
             'status' => 'success',
-            'message' => 'Get Detail wallets successful',
+            'message' => 'Get detail wallet successful',
             'data' => [
                 'wallets' => [
-                    'id' => $Wallets->id,
-                    'message' => $Wallets->user_id,
-                    'name' => $Wallets->name,
-                    'created_at' => $Wallets->created_at,
-                    'updated_at' => $Wallets->updated_at,
-                    'deleted_at' => $Wallets->deleted_at,
-                    'currency_code' => $Wallets->Currency->name,
+                    'id'          => $wallet->id,
+                    'user_id'     => $wallet->user_id,
+                    'name'        => $wallet->name,
+                    'created_at'  => $wallet->created_at,
+                    'updated_at'  => $wallet->updated_at,
+                    'deleted_at'  => $wallet->deleted_at,
+                    'currency'    => $wallet->Currency->name,
                 ]
             ]
         ], 200);

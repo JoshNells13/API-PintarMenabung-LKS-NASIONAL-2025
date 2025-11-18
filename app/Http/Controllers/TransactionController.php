@@ -38,7 +38,7 @@ class TransactionController extends Controller
                 'created_at' => $Transaction->created_at,
                 'id' => $Transaction->id,
             ]
-        ],200);
+        ], 200);
     }
 
     public function DeleteTransaction(Request $request, $id)
@@ -52,7 +52,7 @@ class TransactionController extends Controller
             return response([
                 'status' => 'error',
                 'message' => 'Forbidden access'
-            ],403);
+            ], 403);
         }
 
         if (!$Transaction) {
@@ -72,7 +72,6 @@ class TransactionController extends Controller
 
     public function GetTransaction(Request $request)
     {
-
         $request->validate([
             'page'     => 'sometimes|integer|min:1',
             'per_page' => 'sometimes|integer|min:1',
@@ -82,21 +81,22 @@ class TransactionController extends Controller
 
         $perPage = $request->input('per_page', 25);
 
-
-        $query = Transaction::with(['Wallet', 'Category']);
+        // Filter transaksi yang wallet-nya dimiliki user yang login
+        $query = Transaction::with(['Wallet', 'Category'])
+            ->whereHas('Wallet', function ($q) use ($request) {
+                $q->where('user_id', $request->user()->id);
+            });
 
         if ($request->filled('month')) {
             $query->whereMonth('date', $request->month);
         }
+
         if ($request->filled('year')) {
             $query->whereYear('date', $request->year);
         }
 
-        // paginate otomatis dari Laravel
         $transactions = $query->paginate($perPage);
 
-        return response([
-            $transactions
-        ],200);
+        return response($transactions, 200);
     }
 }
