@@ -5,20 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
+use PDO;
 
 class Wallet extends Model
 {
-    use HasApiTokens,HasFactory;
+    use HasApiTokens, HasFactory;
 
     protected $table = 'wallets';
 
-    public $fillable = ['name','user_id','currency_id'];
+    protected $fillable = ['name', 'user_id', 'currency_id'];
 
-    public function Currency(){
-        return $this->belongsTo(Currencies::class,'currency_id');
+    public function Currency()
+    {
+        return $this->belongsTo(Currencies::class, 'currency_id');
     }
 
-    public function Wallet(){
-        return $this->hasMany(Wallet::class,'wallet_id');
+    public function Transaction()
+    {
+        return $this->hasMany(Transaction::class, 'wallet_id', 'id');
     }
 }

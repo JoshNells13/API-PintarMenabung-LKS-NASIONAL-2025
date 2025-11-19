@@ -59,7 +59,7 @@ class AuthenticationController extends Controller
 
         return response([
             'status' => 'success',
-            'message' => 'Registration Successfull',
+            'message' => 'Login Successfull',
             'data' => [
                 'name' => $CheckUser->name,
                 'email' => $CheckUser->email,

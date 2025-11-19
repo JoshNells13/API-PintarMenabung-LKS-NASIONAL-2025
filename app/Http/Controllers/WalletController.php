@@ -141,11 +141,9 @@ class WalletController extends Controller
             ]
         ], 200);
     }
-
     public function GetDetailWallets(Request $request, $id)
     {
-        // Ambil wallet milik user + eager load currency
-        $wallet = Wallet::with('Currency')
+        $wallet = Wallet::with(['Currency', 'Transaction.Category'])
             ->where('id', $id)
             ->where('user_id', $request->user()->id)
             ->first();
@@ -163,14 +161,29 @@ class WalletController extends Controller
             'message' => 'Get detail wallet successful',
             'data' => [
                 'wallets' => [
-                    'id'          => $wallet->id,
-                    'user_id'     => $wallet->user_id,
-                    'name'        => $wallet->name,
-                    'created_at'  => $wallet->created_at,
-                    'updated_at'  => $wallet->updated_at,
-                    'deleted_at'  => $wallet->deleted_at,
-                    'currency'    => $wallet->Currency->name,
-                ]
+                    'id'         => $wallet->id,
+                    'user_id'    => $wallet->user_id,
+                    'name'       => $wallet->name,
+                    'created_at' => $wallet->created_at,
+                    'updated_at' => $wallet->updated_at,
+                    'currency'   => $wallet->Currency->name,
+                ],
+
+                'transactions' => $wallet->Transaction->map(function ($trx) {
+                    return [
+                        'id'         => $trx->id,
+                        'type'       => $trx->type,
+                        'amount'     => $trx->amount,
+                        'note'       => $trx->note,
+                        'created_at' => $trx->created_at,
+                        'category'   => [
+                            'id'    => $trx->Category->id,
+                            'name'  => $trx->Category->name,
+                            'icon'  => $trx->Category->icon,
+                            'type'  => $trx->Category->type,
+                        ],
+                    ];
+                }),
             ]
         ], 200);
     }
