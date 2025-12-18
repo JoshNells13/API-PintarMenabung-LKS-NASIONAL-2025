@@ -1,46 +1,188 @@
-MASIH DALAM PENGEMBANGAN.....
+# 💰 PintarMenabung – REST API
 
+> **MASIH DALAM PENGEMBANGAN 🚧**
 
-📌 REST API – PintarMenabung
+Backend **PintarMenabung** dikembangkan sebagai **Soal LKS Nasional 2025** bidang **Web Technologies**. Aplikasi ini mensimulasikan sistem **manajemen keuangan pribadi** berbasis REST API yang aman, terstruktur, dan siap diintegrasikan dengan frontend modern.
 
-Backend aplikasi PintarMenabung dibangun menggunakan Laravel dan menyediakan REST API untuk manajemen keuangan pribadi. API ini mencakup fitur otentikasi, pengelolaan dompet, pencatatan transaksi, hingga laporan keuangan.
+PintarMenabung berfokus pada pengelolaan **dompet digital**, **pencatatan transaksi**, serta **laporan keuangan** untuk membantu pengguna mengatur keuangan secara cerdas dan terukur.
 
-🔑 Authentication
+---
 
-POST /api/auth/register – Registrasi user baru
+## 🏆 Konteks LKS Nasional 2025
 
-POST /api/auth/login – Login user & generate token (Laravel Sanctum)
+Proyek **PintarMenabung** dirancang sesuai standar penilaian **LKS Nasional 2025 – Web Technologies**, dengan fokus utama:
 
-POST /api/auth/logout – Logout & revoke token
+* Desain REST API yang konsisten dan scalable
+* Implementasi autentikasi berbasis token
+* Relasi data keuangan yang realistis
+* Dukungan filtering, pagination, dan reporting
+* Kesiapan integrasi frontend (SPA / Mobile)
 
-💱 Currency & Category
+---
 
-GET /api/currencies – Mendapatkan semua mata uang
+## 🔑 Authentication
 
-GET /api/categories – Mendapatkan semua kategori (Income & Expense)
+Menggunakan **Laravel Sanctum** untuk autentikasi user.
 
-👛 Wallet
+### Register User
 
-POST /api/wallets – Tambah dompet
+```http
+POST /api/auth/register
+```
 
-PUT /api/wallets/:walletId – Update dompet
+### Login User
 
-DELETE /api/wallets/:walletId – Hapus dompet
+```http
+POST /api/auth/login
+```
 
-GET /api/wallets – Daftar semua dompet milik user
+Generate access token.
 
-GET /api/wallets/:walletId – Detail dompet tertentu
+### Logout User *(Auth Required)*
 
-💸 Transaction
+```http
+POST /api/auth/logout
+```
 
-POST /api/transactions – Tambah transaksi (income/expense)
+Revoke token aktif.
 
-DELETE /api/transactions/:transactionId – Hapus transaksi
+---
 
-GET /api/transactions – Ambil daftar transaksi (support pagination & filter bulan/tahun)
+## 💱 Currency & Category
 
-📊 Financial Reports
+### Get All Currencies
 
-GET /api/reports/summary-by-category/expense – Ringkasan transaksi berdasarkan kategori pengeluaran
+```http
+GET /api/currencies
+```
 
-GET /api/reports/summary-by-category/income – Ringkasan transaksi berdasarkan kategori pemasukan
+### Get All Categories
+
+```http
+GET /api/categories
+```
+
+Kategori mencakup **Income** dan **Expense**.
+
+---
+
+## 👛 Wallet
+
+### Create Wallet
+
+```http
+POST /api/wallets
+```
+
+### Update Wallet
+
+```http
+PUT /api/wallets/{walletId}
+```
+
+### Delete Wallet
+
+```http
+DELETE /api/wallets/{walletId}
+```
+
+### Get All Wallets
+
+```http
+GET /api/wallets
+```
+
+### Get Wallet Detail
+
+```http
+GET /api/wallets/{walletId}
+```
+
+---
+
+## 💸 Transaction
+
+### Create Transaction
+
+```http
+POST /api/transactions
+```
+
+Digunakan untuk transaksi **income** atau **expense**.
+
+### Delete Transaction
+
+```http
+DELETE /api/transactions/{transactionId}
+```
+
+### Get Transactions
+
+```http
+GET /api/transactions
+```
+
+Mendukung:
+
+* Pagination
+* Filter bulan
+* Filter tahun
+
+---
+
+## 📊 Financial Reports
+
+### Expense Summary by Category
+
+```http
+GET /api/reports/summary-by-category/expense
+```
+
+### Income Summary by Category
+
+```http
+GET /api/reports/summary-by-category/income
+```
+
+---
+
+## 🛡 Middleware & Security
+
+Seluruh endpoint (kecuali register & login) dilindungi oleh:
+
+```
+auth:sanctum
+```
+
+---
+
+## 🧠 Tech Stack
+
+* **Laravel** (REST API)
+* **Laravel Sanctum** (Authentication)
+* **MySQL / PostgreSQL**
+* **RESTful Architecture**
+* **Financial Domain Modeling**
+
+---
+
+## 📌 Catatan Pengembangan
+
+* Proyek ini **belum final** dan masih terus dikembangkan
+* Struktur API disiapkan untuk role **User** (dan opsional Admin)
+* Sangat cocok untuk pengujian kemampuan backend pada kompetisi nasional
+
+---
+
+## 📚 Referensi Resmi
+
+* Dokumentasi Laravel
+* Dokumentasi Laravel Sanctum
+* REST API Best Practices
+* Pedoman LKS Web Technologies Nasional
+
+---
+
+✨ *Smart money needs smart API.*
+
+Kalau uang bisa ngomong, dia bakal bilang: **"tolong pakai PintarMenabung."** 😄
